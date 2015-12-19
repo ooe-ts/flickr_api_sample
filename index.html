@@ -2,8 +2,51 @@
 <head>
   <meta charset="utf-8">
   <title>Flickr_sapmle</title>
+  <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script>
+
+
+  function callFlickrApi(){
+    var tag = $('#tag').val();
+
+    $.ajax({
+      type:'GET',
+      url:"https://api.flickr.com/services/rest/?method=flickr.photos.search&tags="+　tag + "&format=json&api_key=7c590d84cc3fe4521295887ecf898b71",
+      datatype:'jsonp',
+      success:function(json){
+        return json;
+      }
+    });
+
+  }
+
+  function jsonFlickrApi(response) {
+  //  console.log(response.photos.photo)
+    myData = response.photos.photo
+    for(var i in myData) {
+      var farmID= myData[i].farm;
+      var serverID = myData[i].server;
+      var id = myData[i].id;
+      var secret = myData[i].secret;
+
+      var url ="http://farm" + farmID + ".staticflickr.com/" + serverID +"/" + id + "_" + secret+".jpg";
+      console.log(url)
+
+      $('.result').append('<b><img src="' + url + ' "></b>')
+    }
+  }
+
+  </script>
 </head>
 <body>
-  ああああ
+
+<div class="serch">
+    <input type="search" id="tag"  class="text" size="40"　>
+    <input type="button" onclick="callFlickrApi()" value="検索" class="btn">
+</div>
+
+<div class="result">
+</div>
+
 </body>
 </html>
